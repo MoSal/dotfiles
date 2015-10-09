@@ -1,0 +1,65 @@
+# Aliases
+
+## Monitor Control
+
+alias HD1Off='xrandr --output DFP1 --off'
+alias HD1On='xrandr --output DFP1 --mode 1920x1080'
+alias HDOff='xrandr --output HDMI-0 --off'
+alias HDOn='xrandr --output HDMI-0 --mode 1920x1080'
+alias LapOff='xrandr --output LVDS --off'
+alias LapOn='xrandr --output LVDS --mode 1366x768'
+alias VGOff='xrandr --output VGA-0 --off'
+alias VGOn='xrandr --output VGA-0 --mode 1920x1080'
+
+## Pacman
+
+alias Q='pacman -Q'
+alias Qi='pacman -Qi'
+alias Qii='pacman -Qii'
+alias Ql='pacman -Ql'
+alias Qld='pacman -Ql `basename $PWD`'
+alias Qo='pacman -Qo'
+alias D='sudo pacman -D'
+alias R='sudo pacman -R'
+alias S='sudo pacman -S --needed'
+alias Si='sudo pacman -Si'
+alias Sii='sudo pacman -Sii'
+alias Ss='sudo pacman -Ss'
+alias Su='sudo pacman -Su'
+alias Sy='sudo pacman -Sy'
+alias Syy='sudo pacman -Syy'
+alias U='sudo pacman -U'
+alias m=makepkg
+
+## Safety
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias rm='rm -i' # No -q to overwrite -v
+
+## Misc
+alias P='anamnesis -l 5'
+alias eject='sudo eject /dev/sr0'
+alias freq='sudo cpupower frequency-set -r'
+alias nethogs='sudo nethogs wlan0'
+alias iotop='sudo iotop'
+alias g='git'
+
+## Multimedia
+
+alias m3=mpv
+alias p=ffplay
+alias pn='ffplay -nodisp -vn'
+
+alias qiv='/usr/bin/qiv -R' # Read-only, no trash
+alias q='/usr/bin/qiv -R' # Read-only, no trash
+
+alias x264-8="/opt/x264-8b/usr/bin/x264"
+alias x264-10="/opt/x264-10b/usr/bin/x264"
+alias ffmpeg8="LD_PRELOAD=/opt/x264-8b/usr/lib/libx264.so  ffmpeg"
+alias ffmpeg10="LD_PRELOAD=/opt/x264-10b/usr/lib/libx264.so  ffmpeg"
+
+## Net
+alias magnet2torrent='aria2c --bt-metadata-only=true --bt-save-metadata=true'
+alias ssaldl='veth2 saldl -X 129.50.0.50:9051'
+alias ssaldl_socksify="veth2 SOCKS_CONF=/etc/socks_${USER}.conf socksify saldl"
+alias T='transmission-remote'
