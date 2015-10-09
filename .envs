@@ -1,0 +1,18 @@
+#export SDL_AUDIODRIVER=dsp
+#export SDL_AUDIODRIVER=pulse
+export SDL_AUDIODRIVER=alsa
+export HISTSIZE=1000000
+export VDPAU_DRIVER=r600
+export LIBVA_DRIVER_NAME=vdpau
+
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+export BROWSER=$HOME/bin/echo_url
+
+export MPD_HOST=10.8.0.1
+export MPD_PORT=55000
+
+export XZ_OPT=-T0
+
+# -R for colors
+export LESS="less -R"
