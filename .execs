@@ -1,0 +1,41 @@
+PATH+=":/tmp2/bin"
+export PATH
+
+# TABD = Temp Aliases Bin Dir
+
+if [[ ! ${PATH} =~ 'TABD'  ]]; then
+  if [[ -z $TABD ]] ; then
+    export TABD=`mktemp -d /tmp/TABD.XXXX`
+    alias | while read l;do
+      name="$(expr "$l" : '\([^=]*\)=.*')"
+      if [[ -n $name  ]]; then
+        comm="$(expr "$l" : '[^=]*=\(.*\)$')"
+        if ([[ ${comm:0:1} == "'"  ]] || [[ ${comm:0:1} == '"'  ]]); then
+          comm="${comm:1:-1}"
+        fi
+        echo "${comm}" '"$@"' > "${TABD}/${name}"
+       fi
+    done
+    chmod +x ${TABD}/*
+  fi
+
+  PATH+=":${TABD}"
+  export PATH
+fi
+
+# TFBD = Temp Functions Bin Dir
+
+if [[ ! ${PATH} =~ 'TFBD'  ]]; then
+  if [[ -z $TFBD ]] ; then
+    export TFBD=`mktemp -d /tmp/TFBD.XXXX`
+    functions | grep '^[A-z].* () {' | while read l ; do
+      f="${l%%\ *}"
+      echo '#!/bin/zsh' > "${TFBD}/${f}"
+      which $f |tail -n +2 | head -n -1 >> "${TFBD}/${f}"
+    done
+    chmod +x ${TFBD}/*
+  fi
+
+  PATH+=":${TFBD}"
+  export PATH
+fi
