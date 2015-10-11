@@ -1,0 +1,18 @@
+"3.10.1 (created: 2015/08/25 00:41:59)
+
+map <silent> Y :js<Space>util.copyToClipboard(content.document.title,true)<Return>
+map p :open<Space>"<Space>prevent<Space>accidental<Space>opening<Space>of<Space>clipboard<Space>content.
+map P :tabnew<Space>"<Space>prevent<Space>accidental<Space>opening<Space>of<Space>clipboard<Space>content.
+map <C-c> :stop<Return>
+nmap zi :zo!<Space>+10<Space><Return>
+nmap zo :zo!<Space>-10<Space><Return>
+nmap zz :zo!<Space>100<Space><Return>
+set complete=shlf
+set editor=/tmp2/bin/ED-user64
+set noinsertmode
+"style! -name=space * * { line-height: 150% !important;}
+style! -name=visited http* :visited { color:#f070a0 !important; }
+style! -name=ublick * #nav-bar * { visibility: visible; }
+source! /home/user64/.vimperatorrc.local
+
+" vim: set ft=vimperator:
