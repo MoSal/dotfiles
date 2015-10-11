@@ -1,0 +1,5 @@
+! Set Alt_R to mod4
+remove mod1 = Alt_R
+remove mod1 = Alt_L
+add mod4 = Alt_R
+add mod1 = Alt_L
