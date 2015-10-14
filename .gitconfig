@@ -1,0 +1,58 @@
+[user]
+	name = Mohammad Alsaleh
+	email = CE.Mohammad.AlSaleh@gmail.com
+[sendemail]
+	smtpserver = /usr/bin/msmtp
+[diff]
+	# Recommended for fp and se
+	renames = copy
+
+[alias]
+	active = for-each-ref --sort=-committerdate --format='%(committerdate) %(refname)' --count=10
+	co = checkout
+	cl = clean -fdx
+	ps = push
+	#psa = push --all
+	psa = push --mirror
+	pst = push --tags
+	pl = pull
+	pla = pull --all
+	plap = pull --all -p
+	ft = fetch
+	fta = fetch --all
+	ftap = fetch --all -p
+	c = commit
+	cs = commit -s
+	ca = commit -a
+	csa = commit -s -a
+	m = merge
+	rs = reset
+	rsh = reset --hard
+	l = log --decorate --pretty=fuller --show-notes
+	lc = log --show-signature --decorate --pretty=fuller --color --show-notes
+	lcg = log --show-signature --decorate --pretty=fuller --color --show-notes -g --date=local
+	lcs = log --show-signature --decorate --pretty=fuller --color --stat --show-notes
+	lcsp = log --show-signature --decorate --pretty=fuller --color --stat --patch --show-notes
+	lca = log --show-signature --decorate --pretty=fuller --color --ancestry-path --show-notes
+	lcsa = log --show-signature --decorate --pretty=fuller --color --stat --ancestry-path --show-notes
+	lcspa = log --show-signature --decorate --pretty=fuller --color --stat --patch --ancestry-path --show-notes
+	fp = format-patch
+	se = send-email
+	d = diff --stat -p
+	dc = diff --stat -p --color
+	dcc = diff --stat -p --color --cached
+	dccw = diff --stat -p --color --cached --word-diff=color
+	dcw = diff --stat -p --color --word-diff=color
+	dch = diff --stat -p --color HEAD # full diff, cached and non-cached
+	dcm = diff --stat -p --color --diff-filter=M
+	dcmw = diff --stat -p --color --diff-filter=M --word-diff=color
+	sh = show --patch-with-stat
+	shw = show --patch-with-stat --word-diff=color
+	shcw = show --color --decorate --patch-with-stat --word-diff=color
+	ss = stash save -p # Interactive selective stashing of hunks
+	sa = stash apply
+	sd = stash drop
+	sl = stash list
+	ssh = stash show --stat -p --color
+	gp = grep -En
+	gpc = grep -En --color
