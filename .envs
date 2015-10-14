@@ -15,4 +15,4 @@ export MPD_PORT=55000
 export XZ_OPT=-T0
 
 # -R for colors
-export LESS="less -R"
+export LESS="R$LESS"

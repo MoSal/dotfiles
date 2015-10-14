@@ -7,6 +7,10 @@ pexec () {
 	[ $NO_P_EXEC ] || "$@"
 }
 
+xp() {
+  echo "$@" | xsel -bi
+}
+
 sparse_replica() {
   err_msg="Usage: $0 dir1 dir2"
   [[ $# != 2  ]] && echo "Wrong no. of args.\n" $err_msg && return 1

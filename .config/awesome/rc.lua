@@ -45,7 +45,7 @@ beautiful.init("/home/user64/.config/awesome/themes/default/theme.lua")
 terminal = "konsole"
 editor = os.getenv("EDITOR") or "vim"
 xrefresh = "xrefresh"
-setwmname = "wmname LG3D"
+setwmname = "wmname Sawfish"
 invert = "xcalib -i -a"
 xkb_us = "setxkbmap us"
 xkb_ara = "setxkbmap ara"
