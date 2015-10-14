@@ -1,0 +1,23 @@
+[Desktop Entry]
+DefaultProfile=Shell.profile
+
+[Favorite Profiles]
+Favorites=Shell.profile
+
+[KFileDialog Settings]
+Height 1080=570
+Width 1920=988
+
+[KonsoleWindow]
+ShowMenuBarByDefault=false
+ShowWindowTitleOnTitleBar=true
+
+[MainWindow]
+Height 1080=1050
+MenuBar=Disabled
+State=AAAA/wAAAAD9AAAAAAAAB4AAAAQcAAAABAAAAAQAAAAIAAAACPwAAAAA
+ToolBarsMovable=Disabled
+Width 1920=1918
+
+[TabBar]
+TabBarVisibility=ShowTabBarWhenNeeded
