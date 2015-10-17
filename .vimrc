@@ -31,6 +31,7 @@ set background=dark
 set backspace=indent,eol,start
 set backup
 set backupdir=/vim
+set undodir=/vim
 set cmdheight=2
 set completefunc=youcompleteme#Complete
 set completeopt=preview,menuone
