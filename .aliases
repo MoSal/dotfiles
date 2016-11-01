@@ -21,6 +21,7 @@ alias Qld='pacman -Ql `basename $PWD`'
 alias Qo='pacman -Qo'
 alias D='sudo pacman -D'
 alias R='sudo pacman -R'
+alias F='sudo pacman -F'
 alias S='sudo pacman -S --needed'
 alias Si='sudo pacman -Si'
 alias Sii='sudo pacman -Sii'
@@ -35,6 +36,10 @@ alias m=makepkg
 alias cp='cp -iv'
 alias mv='mv -iv'
 alias rm='rm -i' # No -q to overwrite -v
+
+# nvim
+alias vim='nvim'
+alias vimdiff='nvim -d'
 
 ## Misc
 alias P='anamnesis -l 5'
@@ -60,6 +65,6 @@ alias ffmpeg10="LD_PRELOAD=/opt/x264-10b/usr/lib/libx264.so  ffmpeg"
 
 ## Net
 alias magnet2torrent='aria2c --bt-metadata-only=true --bt-save-metadata=true'
-alias ssaldl='veth2 saldl -X 129.50.0.50:9051'
+alias ssaldl='veth2 saldl -x socks5h://129.50.0.50:9050'
 alias ssaldl_socksify="veth2 SOCKS_CONF=/etc/socks_${USER}.conf socksify saldl"
 alias T='transmission-remote'

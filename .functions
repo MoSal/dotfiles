@@ -43,16 +43,39 @@ URIs() {
   tshark tcp -Y "http.request.full_uri" -T fields -e http.request.full_uri $@
 }
 
+T-sleep-if-active() {
+  while [[ "$(transmission-remote -tactive -l |wc -l)" != 2 ]]; do
+    echo -n '\rWaiting on active torrents to finish...'
+    sleep 2
+  done
+  echo -n '\n'
+}
+
+T-sleep-if-downloading() {
+  while [[ "$(transmission-remote -tactive -l | egrep -v '(^Sum|\sSeeding)' |wc -l)" != 1 ]]; do
+    echo -n '\rWaiting on active non-seeding torrents to finish...'
+    sleep 2
+  done
+  echo -n '\n'
+}
+
 trw() {
   d_rate=$1
   u_rate=$2
   t="$3"
   shift;shift;shift
-  transmission-remote -gsr 0 -w ./
-  transmission-remote -a "$t" $@
-  sleep 2
-  curr_t="$(expr "`transmission-remote -l| tail -2|head -1`" : '\s*\([0-9]*\)\s.*')"
-  transmission-remote -t "$curr_t" -d "$d_rate" -u "$u_rate" -sr 0
+  transmission-remote -w "$PWD"
+  if transmission-remote -a "$t" $@; then
+    sleep 1
+    curr_t="$(expr "`transmission-remote -tactive -l| tail -2|head -1`" : '\s*\([0-9]*\)\s.*')"
+    if  [[ "${curr_t}" =~ '[0-9]+' ]]; then
+      transmission-remote -t "$curr_t" -d "$d_rate" -u "$u_rate"
+    else
+      echo No torrent ID found "'curr_t=${curr_t}'".
+    fi
+  else
+    echo Adding torrent "'${t}'" failed.
+  fi
 }
 
 ttrw() {
@@ -362,7 +385,8 @@ spectro2 () {
 	rm -f "${1%.*}.png"
 }
 spectro3 () {
-	sox --ignore-length -t wav <(wavout ${1} 2>/dev/null) -n trim $2 $3 spectrogram -o "${1%.*}.png"
+	#sox --ignore-length -t wav <(wavout ${1} 2>/dev/null) -n trim $2 $3 spectrogram -o "${1%.*}.png"
+	sox --ignore-length -t wav =(ffmpeg -i ${1} -ss $2 -t $3 -f wav - 2>/dev/null) -n spectrogram -o "${1%.*}.png"
 	qiv "${1%.*}.png"
 	rm -f "${1%.*}.png"
 }
@@ -397,6 +421,10 @@ wavout () {
 
 wavout48 () {
   wavout "$1" | sox --ignore-length -t wav - -t wav - rate -vs 48000 2>/dev/null
+}
+
+wavout44 () {
+  wavout "$1" | sox --ignore-length -t wav - -t wav - rate -vs 44100 2>/dev/null
 }
 
 ## Lossless
@@ -533,12 +561,12 @@ avtags () {
 ## Download
 
 yo-sal() {
-  info="$(youtube-dl --get-url --get-filename $@ | egrep -av '(srt|vtt)$')"
+  info="$(youtube-dl -f '[protocol!=m3u8][protocol!=m3u8_native]' --get-url --get-filename $@ | egrep -av '(srt|vtt)$')"
   no_lines="$(echo $info | wc -l)"
   [[ "${no_lines}" != 2  ]] && echo invalid no. of lines && return 1
   url="$(echo $info | head -1)"
   f_name="$(echo $info | tail -1)"
-  saldl -nTrm "$url" -o "${f_name//\ /_}"
+  saldl -nTrm -a2 "$url" -o "${f_name//\ /_}"
 }
 
 ## Play
@@ -587,11 +615,11 @@ m2s () {
 }
 
 x2s2 () {
-	dir="$1"
-	ex="$2"
+	ex="$1"
+	dir="$2"
 	[[ ${dir:0:1} != '/' ]] && dir="$PWD/$dir" 
 	shift; shift
-	find $dir -regextype posix-extended ! -type d ! -type p $@ -exec ${(z)ex} '{}' '+'
+	find $dir -regextype posix-extended $@ ! -type d ! -type p -exec ${(z)ex} '{}' '+'
 	unset ex
 }
 

@@ -16,3 +16,6 @@ export XZ_OPT=-T0
 
 # -R for colors
 export LESS="R$LESS"
+
+# Use nvim instead of vim for programs that use $EDITOR like git
+EDITOR=nvim
