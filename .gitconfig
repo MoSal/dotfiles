@@ -1,5 +1,5 @@
 [user]
-	name = Mohammad Alsaleh
+	name = Mohammad AlSaleh
 	email = CE.Mohammad.AlSaleh@gmail.com
 [sendemail]
 	smtpserver = /usr/bin/msmtp
