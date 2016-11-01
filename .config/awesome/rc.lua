@@ -460,6 +460,8 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "mpv" },
       properties = { floating = true } },
+    { rule = { class = "Gvim" },
+      properties = { floating = true } },
     { rule = { class = "ffplay" },
       properties = { floating = true } },
     { rule = { class = "VLC" },
