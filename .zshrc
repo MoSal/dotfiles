@@ -7,8 +7,9 @@
 WORDCHARS='*?_-.[]~!#$%^(){}<>'
 #WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
 
-# Add path for local completions
-fpath=($fpath $XDG_DATA_HOME/zsh/site_functions)
+# Add path for completions from (multi)rust nightly
+FPATH+=":$HOME/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/share/zsh/site-functions"
+compinit
 
 ## input mode ,also see bindkey (man zshall)
 #set -o vi
