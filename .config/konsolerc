@@ -1,8 +1,8 @@
 [Desktop Entry]
-DefaultProfile=Shell.profile
+DefaultProfile=BlBg.profile
 
 [Favorite Profiles]
-Favorites=Shell.profile
+Favorites=WhBg.profile,BlBg.profile,Solarized.profile,PaleBG.profile
 
 [KFileDialog Settings]
 Height 1080=570
