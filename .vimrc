@@ -51,4 +51,7 @@ set showcmd
 set termencoding=utf-8
 set updatetime=2000
 set window=46
+
+" Skip YCM asking to load
+let g:ycm_confirm_extra_conf = 0
 " vim: set ft=vim :
