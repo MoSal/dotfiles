@@ -1,3 +1,4 @@
 colorscheme elflord
-set guifont=DejaVu\ Sans\ Mono\ 12
 set guioptions=aegit
+set guifont=Fira\ Mono\ 16
+set guicursor=

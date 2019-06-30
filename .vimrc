@@ -54,4 +54,9 @@ set window=46
 
 " Skip YCM asking to load
 let g:ycm_confirm_extra_conf = 0
+
+" YCM rust (note: <Leader> = '\')
+nnoremap <Leader>] :YcmCompleter GoTo<CR>
+let g:ycm_rust_src_path = '/home/user64/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
+
 " vim: set ft=vim :

@@ -45,6 +45,8 @@ alias vimdiff='nvim -d'
 alias P='anamnesis -l 5'
 alias eject='sudo eject /dev/sr0'
 alias freq='sudo cpupower frequency-set -r'
+alias freq0='sudo cpupower -c 0 frequency-set'
+alias freq1='sudo cpupower -c 1 frequency-set'
 alias nethogs='sudo nethogs wlan0'
 alias iotop='sudo iotop'
 alias g='git'
@@ -55,8 +57,10 @@ alias m3=mpv
 alias p=ffplay
 alias pn='ffplay -nodisp -vn'
 
-alias qiv='/usr/bin/qiv -R' # Read-only, no trash
-alias q='/usr/bin/qiv -R' # Read-only, no trash
+#alias qiv='/usr/bin/qiv -R' # Read-only, no trash
+#alias q='/usr/bin/qiv -R' # Read-only, no trash
+alias q='pqiv -n'
+alias q1='pqiv -n --max-depth=1'
 
 alias x264-8="/opt/x264-8b/usr/bin/x264"
 alias x264-10="/opt/x264-10b/usr/bin/x264"
@@ -68,3 +72,4 @@ alias magnet2torrent='aria2c --bt-metadata-only=true --bt-save-metadata=true'
 alias ssaldl='veth2 saldl -x socks5h://129.50.0.50:9050'
 alias ssaldl_socksify="veth2 SOCKS_CONF=/etc/socks_${USER}.conf socksify saldl"
 alias T='transmission-remote'
+alias youtube-dl='youtube-dl --hls-prefer-native --hls-use-mpegts --fixup warn'

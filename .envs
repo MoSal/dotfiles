@@ -1,9 +1,14 @@
+export LC_COLLATE=C
+
+export QT_QPA_PLATFORMTHEME="qt5ct"
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
+
 #export SDL_AUDIODRIVER=dsp
 #export SDL_AUDIODRIVER=pulse
 export SDL_AUDIODRIVER=alsa
 export HISTSIZE=1000000
-export VDPAU_DRIVER=r600
-export LIBVA_DRIVER_NAME=vdpau
+export VDPAU_DRIVER=radeonsi
+export LIBVA_DRIVER_NAME=radeonsi
 
 export _JAVA_AWT_WM_NONREPARENTING=1
 
@@ -18,4 +23,7 @@ export XZ_OPT=-T0
 export LESS="R$LESS"
 
 # Use nvim instead of vim for programs that use $EDITOR like git
-EDITOR=nvim
+export EDITOR=nvim
+
+# Add path for completions from rustup / nightly toolchain
+export FPATH="$FPATH:$HOME/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/share/zsh/site-functions"

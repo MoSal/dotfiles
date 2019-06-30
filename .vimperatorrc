@@ -1,4 +1,4 @@
-"3.10.1 (created: 2015/08/25 00:41:59)
+"3.15.0 (created: 2017/01/26 16:54:22)
 
 map <silent> Y :js<Space>util.copyToClipboard(content.document.title,true)<Return>
 map p :open<Space>"<Space>prevent<Space>accidental<Space>opening<Space>of<Space>clipboard<Space>content.
@@ -8,11 +8,49 @@ nmap zi :zo!<Space>+10<Space><Return>
 nmap zo :zo!<Space>-10<Space><Return>
 nmap zz :zo!<Space>100<Space><Return>
 set complete=shlf
-set editor=/tmp2/bin/ED-user64
 set noinsertmode
-"style! -name=space * * { line-height: 150% !important;}
 style! -name=visited http* :visited { color:#f070a0 !important; }
 style! -name=ublick * #nav-bar * { visibility: visible; }
 source! /home/user64/.vimperatorrc.local
 
 " vim: set ft=vimperator:
+
+javascript <<EOF
+function force_medium_weight() {
+  content.document.querySelectorAll('*').forEach(function(n) {
+    if (!n.style.fontWeight) {
+      if (n.parentElement && n.parentElement.style.fontWeight) {
+        n.style.fontWeight = n.parentElement.style.fontWeight
+      }
+      else if (n.parentElement && !n.parentElement.style.fontWeight) {
+        n.style.fontWeight = "inherit"
+      }
+      else {
+        n.style.fontWeight = 500
+      }
+    }
+
+    if (n.style.fontWeight >= 500 && n.style.fontWeight <= 900) {
+      n.style.fontWeight = n.style.fontWeight // no change
+    }
+    else if (n.style.fontWeight >= 100 && n.style.fontWeight < 500) {
+      n.style.fontWeight = 500
+    }
+    else if (n.style.fontWeight == "normal") {
+      n.style.fontWeight = 500
+    }
+    else if (n.style.fontWeight == "bolder") {
+      n.style.fontWeight = 900
+    }
+    else if (n.style.fontWeight == "bold") {
+      n.style.fontWeight = 700
+    }
+    else if (n.style.fontWeight == "lighter") {
+      n.style.fontWeight = 300
+    }
+  });
+}
+
+EOF
+
+" autocmd! PageLoad '.*' :js force_medium_weight()

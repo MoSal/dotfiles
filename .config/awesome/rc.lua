@@ -46,8 +46,11 @@ terminal = "konsole"
 editor = os.getenv("EDITOR") or "vim"
 xrefresh = "xrefresh"
 setwmname = "wmname Sawfish"
-invert = "xcalib -i -a"
+-- invert = "xcalib -i -a"
+invert = "compton-invert"
+clipboard = "anamnesis -b"
 xkb_us = "setxkbmap us"
+xkb_fr = "setxkbmap ca fr"
 xkb_ara = "setxkbmap ara"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -186,7 +189,7 @@ for s = 1, screen.count() do
 
     -- Create the wibox
     --mywibox[s] = awful.wibox({ position = "bottom", screen = s })
-    mywibox[s] = awful.wibox({ position = "bottom", height = 28,  screen = s })
+    mywibox[s] = awful.wibox({ position = "bottom", height = 44,  screen = s })
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
@@ -274,27 +277,29 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Shift"   }, "r", function () awful.util.spawn(xrefresh) end),
     awful.key({ modkey,           }, "i", function () awful.util.spawn(invert) end),
+    awful.key({ modkey,           }, "b", function () awful.util.spawn(clipboard) end),
     awful.key({ modkey,           }, "F1", function () awful.util.spawn(xkb_us) end),
     awful.key({ modkey,           }, "F2", function () awful.util.spawn(xkb_ara) end),
+    awful.key({ modkey,           }, "F12", function () awful.util.spawn(xkb_fr) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
-    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.02)    end),
-    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.02)    end),
+    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.01)    end),
+    awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.01)    end),
     awful.key({ modkey,           }, "Right",     function () awful.tag.incmwfact( 0.01)    end),
     awful.key({ modkey,           }, "Left",     function () awful.tag.incmwfact(-0.01)    end),
 
     awful.key({ modkey, "Control"   }, "Down",
         function () 
 		if awful.client.floating.get(client.focus) then
-			h_diff = client.focus:geometry()['height']*.02
+			h_diff = client.focus:geometry()['height']*.01
 			awful.client.moveresize(0, 0, 0, h_diff)
 		end
 	end),
     awful.key({ modkey, "Control"   }, "Up",
         function () 
 		if awful.client.floating.get(client.focus) then
-			h_diff = -client.focus:geometry()['height']*.02
+			h_diff = -client.focus:geometry()['height']*.01
 			awful.client.moveresize(0, 0, 0, h_diff)
 		end
 	end),

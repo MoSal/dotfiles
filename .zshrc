@@ -7,10 +7,6 @@
 WORDCHARS='*?_-.[]~!#$%^(){}<>'
 #WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
 
-# Add path for completions from (multi)rust nightly
-FPATH+=":$HOME/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/share/zsh/site-functions"
-compinit
-
 ## input mode ,also see bindkey (man zshall)
 #set -o vi
 
@@ -28,6 +24,7 @@ zle -N delete-to-char-backwards
 # bindkey(s)
 #bindkey "^H" delete-to-char-backwards
 bindkey "^H" zap-to-char-backwards
+bindkey "^F" zap-to-char
 bindkey "^D" delete-word
 bindkey "^U" backward-kill-line # opposite of "^K"
 # Overwritten Defaults
@@ -39,3 +36,6 @@ bindkey "^U" backward-kill-line # opposite of "^K"
 #zstyle ':completion:*'                 matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*'                 matcher-list 'm:{a-z}={a-z}'
 zstyle ':completion:*'                 matcher-list 'm:{A-Z}={A-Z}'
+
+# Disable GRML trans function (conflicts with trans from translate-shell)
+unfunction trans

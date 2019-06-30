@@ -2,14 +2,12 @@
 xrdb $HOME/.Xdefaults
 xset s off
 xmodmap $HOME/.Xmodmap
-xrandr --output LVDS --off
-xrandr --output HDMI-0 --mode 1920x1080
-xrandr --dpi 160
+#anamnesis --start &
 parcellite &
-anamnesis --start &
-mpv --idle --no-force-window &
-
-#/home/user64/bin/b-warn &
+#pulseaudio --start
+#xrandr --dpi 104
+#xrandr --output HDMI1 --set 'Broadcast RGB' Full
+#xrandr --output HDMI1 --mode 3840x2160
 
 #exec awesome
 exec awesome --no-argb

@@ -2,7 +2,7 @@
 DefaultProfile=BlBg.profile
 
 [Favorite Profiles]
-Favorites=WhBg.profile,BlBg.profile,Solarized.profile,PaleBG.profile
+Favorites=Solarized.profile,WhBg.profile,PaleBG.profile,BlBg.profile
 
 [KFileDialog Settings]
 Height 1080=570
@@ -13,11 +13,14 @@ ShowMenuBarByDefault=false
 ShowWindowTitleOnTitleBar=true
 
 [MainWindow]
-Height 1080=1050
+Height 1080=1034
+Height 2160=1909
 MenuBar=Disabled
-State=AAAA/wAAAAD9AAAAAAAAB4AAAAQcAAAABAAAAAQAAAAIAAAACPwAAAAA
+State=AAAA/wAAAAD9AAAAAAAADv4AAAhCAAAABAAAAAQAAAAIAAAACPwAAAAA
 ToolBarsMovable=Disabled
 Width 1920=1918
+Width 3840=3397
+Width 4096=4096
 
 [TabBar]
 TabBarVisibility=ShowTabBarWhenNeeded

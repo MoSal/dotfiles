@@ -1,19 +1,74 @@
 " Load vim addons and syntax highlighting files
 set rtp^=/usr/share/vim/vimfiles/
 
+
 syntax on
 colorscheme ron
+
+" Needs the "words" Arch package
+set dictionary=/usr/share/dict/american-english
+ 
+" Avoid cursor blinking
+set gcr=
+
+" Share clipboard with X
+set clipboard=unnamedplus
 
 set backupdir=/vim
 set undodir=/vim
 
+" Plugins
+call plug#begin('~/.local/share/nvim/plugged')
+
+Plug 'ervandew/supertab', { 'do': ':UpdateRemotePlugins' }
+Plug 'rust-lang/rust.vim', { 'do': ':UpdateRemotePlugins' }
+Plug 'leafgarland/typescript-vim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'junegunn/fzf', { 'do': ':UpdateRemotePlugins' }
+Plug 'zah/nim.vim', { 'do': ':UpdateRemotePlugins' }
+Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next',  'do': 'bash install.sh' }
+
+call plug#end()
+
+" SuperTab: Move from top to bottom
+let g:SuperTabDefaultCompletionType = "<c-n>"
+
+" LanguageClient config
+
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
+    " \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rls'],
+    \ 'c': ['clangd'],
+    \ }
+
+" Automatically start language servers and deoplete
+let g:LanguageClient_autoStart = 1
+let g:deoplete#enable_at_startup = 1
+
+" key mappings
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+
+" deoplete clang config
+let g:deoplete#sources#clang#libclang_path = "/usr/lib/libclang.so"
+let g:deoplete#sources#clang#clang_header = "/usr/include/clang"
+
+
+
+" YCM conf
+" let g:ycm_server_python_interpreter = '/usr/bin/python2'
+" let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 " Skip YCM asking to load
-let g:ycm_confirm_extra_conf = 0
+" let g:ycm_confirm_extra_conf = 0
 
 " YCM rust (note: <Leader> = '\')
-nnoremap <Leader>] :YcmCompleter GoTo<CR>
-"let g:ycm_rust_src_path = '/home/user64/.multirust/toolchains/nightly/src/rustc-nightly/src'
-let g:ycm_rust_src_path = '/home/user64/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
+"nnoremap <Leader>] :YcmCompleter GoTo<CR>
+" let g:ycm_rust_src_path = '/home/user64/.multirust/toolchains/nightly-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src'
 
 "let g:powerline_pycmd = "py3"
 

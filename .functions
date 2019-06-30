@@ -2,6 +2,8 @@
 
 # General
 
+VID_EXT='\.(mkv|mp4|ogg|avi|divx|mpg|mpeg|wmv|asf|3gp|3g2|mov|skm|m4v|f4v|flv|rm|rmvb|nut|ogv|dv|ts|mts|webm|webv|vob)$'
+
 pexec () {
 	[ $NO_P_ECHO ] || echo "$@" 1>&2
 	[ $NO_P_EXEC ] || "$@"
@@ -18,12 +20,12 @@ sparse_replica() {
   [[ ! -d $2 ]] && echo "$2 is not a dir!\n" $err_msg && return 1
   [[ "`realpath $1`" == "`realpath $2`" ]] && echo "$1 & $2 are the same path.\n" $err_msg && return 1
 
-  find "$1" -type d | while read d; do
+  find -H "$1" -type d | while read d; do
     echo mkdir -p ${d/$1/$2}
     mkdir -p ${d/$1/$2}
   done
 
-  find "$1" -type f | while read f; do
+  find -H "$1" -type f | while read f; do
     echo dd if=/dev/zero of="${f/$1/$2}" bs=1 seek="`stat -c '%s' $f`" count=0
     dd if=/dev/zero of="${f/$1/$2}" bs=1 seek="`stat -c '%s' $f`" count=0 2>/dev/null
   done
@@ -34,8 +36,7 @@ calc() {
 }
 
 zcalc() {
-  local a
-  let a="$*"
+  local a="$*"
   echo $a
 }
 
@@ -57,6 +58,21 @@ T-sleep-if-downloading() {
     sleep 2
   done
   echo -n '\n'
+}
+
+T-add-trackers() {
+
+  t_list=(udp://tracker.coppersurfer.tk:6969/announce
+          udp://open.demonii.com:1337
+          udp://tracker.pirateparty.gr:6969/announce
+          udp://tracker.opentrackr.org:1337
+          udp://9.rarbg.to:2710
+          udp://9.rarbg.me:2710)
+
+  for t in $t_list; do
+    T -t$1 -td $t
+  done
+
 }
 
 trw() {
@@ -88,7 +104,8 @@ ttrw() {
   fi
 
   shift;shift;shift
-  trw $d_rate $u_rate "http://torrage.com/torrent/${tHash}.torrent" $@
+  #trw $d_rate $u_rate "http://torrage.com/torrent/${tHash}.torrent" $@
+  trw $d_rate $u_rate <(curl --header 'Host: itorrents.org' --user-agent 'Mozilla/5.0 (X11; Linux x86_64; rv:64.0) Gecko/20100101 Firefox/64.0' --header 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' --header 'Accept-Language: en-US,en;q=0.5' --header 'DNT: 1' --cookie '__cfduid=d22adfc50f64e8bd8e31fc9dba57ebb811536779066; cf_clearance=e9653b53f69590b66ab7d02b3ddcda3d78558fea-1542153388-3600-150' --header 'Upgrade-Insecure-Requests: 1' "https://itorrents.org/torrent/${tHash}.torrent" 2>/dev/null) $@
 }
 
 ttrw2() {
@@ -115,7 +132,7 @@ ttrw3() {
   fi
 
   shift;shift;shift
-  trw $d_rate $u_rate "http://torrentproject.se/torrent/${tHash}.torrent" $@
+  trw $d_rate $u_rate "https://btdb.eu/tfiles//${tHash}.torrent" $@
 }
 
 ttrw4() {
@@ -165,9 +182,9 @@ Fireg() {
         shift
 	if [[ -n "$2" ]]
 	then
-                find "${1}" -regextype posix-extended ! -type d ! -type p -iregex ".*${2}.*" -exec ${(z)ex} '{}' '+'
+                find -H "${1}" -regextype posix-extended ! -type d ! -type p -iregex ".*${2}.*" -exec ${(z)ex} '{}' '+'
 	else
-                find "$PWD" -regextype posix-extended ! -type d ! -type p -iregex ".*${1}.*" -exec ${(z)ex} '{}' '+'
+                find -H "$PWD" -regextype posix-extended ! -type d ! -type p -iregex ".*${1}.*" -exec ${(z)ex} '{}' '+'
 	fi
 }
 
@@ -176,11 +193,11 @@ Fireg_old() {
         shift
 	if [[ -n "$2" ]]
 	then
-                find "${1}" -regextype posix-extended ! -type d ! -type p -iregex ".*${2}.*" 2>/dev/null | while read l; do
+                find -H "${1}" -regextype posix-extended ! -type d ! -type p -iregex ".*${2}.*" 2>/dev/null | while read l; do
                   fls=($fls[@] "$l")
                 done
 	else
-                find "$PWD" -regextype posix-extended ! -type d ! -type p -iregex ".*${1}.*" 2>/dev/null | while read l; do
+                find -H "$PWD" -regextype posix-extended ! -type d ! -type p -iregex ".*${1}.*" 2>/dev/null | while read l; do
                   fls=($fls[@] "$l")
                 done
 	fi
@@ -194,7 +211,7 @@ Fparams() {
 	dir="$1" 
 	[[ ${dir:0:1} != '/' ]] && dir="$PWD/$dir" 
 	shift
-	find $dir -regextype posix-extended ! -type d ! -type p $@ -exec ${(z)ex} '{}' '+'
+	find -H $dir -regextype posix-extended ! -type d ! -type p $@ -exec ${(z)ex} '{}' '+'
 }
 
 Fparams_old() {
@@ -203,7 +220,7 @@ Fparams_old() {
 	dir="$1" 
 	[[ ${dir:0:1} != '/' ]] && dir="$PWD/$dir" 
 	shift
-	find $dir -regextype posix-extended ! -type d ! -type p $@ 2>/dev/null | while read l; do
+	find -H $dir -regextype posix-extended ! -type d ! -type p $@ 2>/dev/null | while read l; do
           fls=($fls[@] "$l")
 	done
         echo ${(z)ex} $fls[@]
@@ -234,7 +251,7 @@ xlcri() {
     locate -0 -bir ${regex}
   else
     locate -0 -bir "${regex}.*"
-  fi | egrep -az '(/BTRFS|/STORAGE|/EXTERNAL|/NoShare|/tmp2/|/E2|/E3|/E4)' | if [[ $FILTER_DONE == 1 ]];then
+  fi | egrep -az '^(/media/STORAGE|/media/E[0-9]|/tmp2/)' | if [[ $FILTER_DONE == 1 ]];then
     grep -azv 'ez_done/'
   else
     tee
@@ -282,7 +299,7 @@ lcri() {
     locate -bir ${regex}
   else
     locate -bir "${regex}.*"
-  fi | egrep -a '(/BTRFS|/STORAGE|/EXTERNAL|/NoShare|/tmp2/|/E2|/E3|/E4)'
+  fi | egrep -a '^(/media/|/tmp2/)'
 }
 
 lcri2() {
@@ -316,6 +333,32 @@ mpush() {
 # Multimedia
 
 ## Misc
+
+
+dvd-track-split() {
+ if [[ -z $1 ]] || [[ $1 == '-h' ]]; then
+   echo dvd-track-split '<folder or iso path>'
+   return
+ fi
+ local -Z2 tn="$(lsdvd $1 | grep '^Title'| wc -l)"
+ for t in {01..$tn}; do
+   pexec mplayer dvdnav://$t -dvd-device $1 -dumpstream -dumpfile $t.VOB
+ done
+ pexec mplayer dvdnav://menu -dvd-device $1 -dumpstream -dumpfile menu.VOB
+}
+
+4gb() {
+  ff_start=''
+  ff_end=''
+  if [[ -n $2 ]]; then
+    ff_start="-ss $2"
+  fi
+  if [[ -n $3 ]]; then
+    ff_end="-to $3"
+  fi
+  out_file="${1//[|\"\'\[\]\*\?<>]/_}"
+  ffmpeg -i $1 -vn -ab 320k ${(z)ff_start} ${(z)ff_end} /tmp2/4GB/${out_file##*/}.mp3
+}
 
 cap-frame() {
   vfile="$1"
@@ -381,13 +424,13 @@ spectro () {
 }
 spectro2 () {
 	sox "${1}" -n trim $2 $3 spectrogram -o "${1%.*}.png"
-	qiv "${1%.*}.png"
+	q "${1%.*}.png"
 	rm -f "${1%.*}.png"
 }
 spectro3 () {
 	#sox --ignore-length -t wav <(wavout ${1} 2>/dev/null) -n trim $2 $3 spectrogram -o "${1%.*}.png"
 	sox --ignore-length -t wav =(ffmpeg -i ${1} -ss $2 -t $3 -f wav - 2>/dev/null) -n spectrogram -o "${1%.*}.png"
-	qiv "${1%.*}.png"
+	q "${1%.*}.png"
 	rm -f "${1%.*}.png"
 }
 
@@ -501,11 +544,11 @@ aper () {
 ## Meta
 
 RG_UP() {
-  # REMEMBER: find with no args means use $PWD
-  find $@ -regextype posix-extended -type d | while read d; do
+  # REMEMBER: find  with no args means use $PWD
+  find -H $@ -regextype posix-extended -type d | while read d; do
     #if stat --print='' "${d}"/*.[Ff][Ll][Aa][Cc] 2>/dev/null; then 
-    # Use find to -regextype posix-extended avoid matching dirs
-    if [[ -n $(find "${d}" -regextype posix-extended -maxdepth 1 -mindepth 1 -type f -iname '*.flac' 2>/dev/null) ]]; then 
+    # Use find -H to -regextype posix-extended avoid matching dirs
+    if [[ -n $(find -H "${d}" -regextype posix-extended -maxdepth 1 -mindepth 1 -type f -iname '*.flac' 2>/dev/null) ]]; then 
       if ( exist_tag all EBU_R128_LOUDNESS_SCAN_DATE "${d}"/*.[Ff][Ll][Aa][Cc] ) ; then
         echo skipping "$d"...
       else 
@@ -514,8 +557,10 @@ RG_UP() {
         fi
         if [[ -z $DRY_RUN  ]]; then
           echo scanning "$d"...
+          metaflac --remove-replay-gain "${d}"/*.[Ff][Ll][Aa][Cc]
           metaflac --remove-tag=REPLAYGAIN_REFERENCE_LOUDNESS "${d}"/*.[Ff][Ll][Aa][Cc]
-          loudness tag "${d}"/*.[Ff][Ll][Aa][Cc]
+          loudness tag ${LOUDNESS_TAG_ARGS} "${d}"/*.[Ff][Ll][Aa][Cc]
+          [ -n $LOUDNESS_TAG_ARGS  ] && metaflac --set-tag=EBU_R128_LOUDNESS_TAG_ARGS="$LOUDNESS_TAG_ARGS" "${d}"/*.[Ff][Ll][Aa][Cc]
           metaflac --set-tag=EBU_R128_LOUDNESS_SCAN_DATE="`date '+%Y.%m.%d'`" "${d}"/*.[Ff][Ll][Aa][Cc]
         else
           echo dry-run: scanning "$d"...
@@ -523,6 +568,10 @@ RG_UP() {
       fi
     fi
   done
+}
+
+RGT_UP() {
+  LOUDNESS_TAG_ARGS='-t' RG_UP $@
 }
 
 m3i () {
@@ -538,7 +587,8 @@ mi () {
 }
 
 ffmi () {
-	ffprobe -show_format -show_streams -unit -prefix -pretty -fflags nometaconv $@ 2> /dev/null | less
+	#ffprobe -show_format -show_streams -unit -prefix -pretty -fflags nometaconv $@ 2> /dev/null | less
+	ffprobe -show_format -show_streams -unit -prefix -pretty $@ 2> /dev/null | less
 }
 
 ffmt () {
@@ -560,14 +610,6 @@ avtags () {
 
 ## Download
 
-yo-sal() {
-  info="$(youtube-dl -f '[protocol!=m3u8][protocol!=m3u8_native]' --get-url --get-filename $@ | egrep -av '(srt|vtt)$')"
-  no_lines="$(echo $info | wc -l)"
-  [[ "${no_lines}" != 2  ]] && echo invalid no. of lines && return 1
-  url="$(echo $info | head -1)"
-  f_name="$(echo $info | tail -1)"
-  saldl -nTrm -a2 "$url" -o "${f_name//\ /_}"
-}
 
 ## Play
 
@@ -585,12 +627,17 @@ mlcri() {
 vlcri() {
   # depends on lcri function defined earlier in this file
   [[ -z $MPL ]] && MPL="mpv"
-  ${(z)MPL} -playlist =(lcri $@ 2>/dev/null | egrep -ai '(mkv|mp4|ogg|avi|divx|mpg|mpeg|wmv|asf|3gp|mov|mov|skm|m4v|flv|rm|rmvb|nut|ogv|dv|ts|mts)$')
+  ${(z)MPL} -playlist =(lcri $@ 2>/dev/null | egrep -ai $VID_EXT)
+}
 
+vlcriP() {
+  # depends on lcri function defined earlier in this file
+  [[ -z $MPL ]] && MPL="mpv"
+  ${(z)MPL} -playlist =(lcri $@ 2>/dev/null | grep /P/ | egrep -ai $VID_EXT)
 }
 
 qlcri() {
-  [[ -z $Q ]] && Q=qiv
+  [[ -z $Q ]] && Q=q
   qlist=()
   lcri $@ 2>/dev/null | while read f ; do
     qlist=($qlist[@] "$f")
@@ -603,11 +650,11 @@ m2s () {
 	fls=()
 	if [[ -n "$2" ]]
 	then
-                find "${1}" -regextype posix-extended ! -type d ! -type p -iregex ".*${2}.*" 2>/dev/null | while read l; do
+                find -H "${1}" -regextype posix-extended ! -type d ! -type p -iregex ".*${2}.*" 2>/dev/null | while read l; do
                   fls=($fls[@] "$l")
                 done
 	else
-                find "$PWD" -regextype posix-extended ! -type d ! -type p -iregex ".*${1}.*" 2>/dev/null | while read l; do
+                find -H "$PWD" -regextype posix-extended ! -type d ! -type p -iregex ".*${1}.*" 2>/dev/null | while read l; do
                   fls=($fls[@] "$l")
                 done
 	fi
@@ -619,7 +666,7 @@ x2s2 () {
 	dir="$2"
 	[[ ${dir:0:1} != '/' ]] && dir="$PWD/$dir" 
 	shift; shift
-	find $dir -regextype posix-extended $@ ! -type d ! -type p -exec ${(z)ex} '{}' '+'
+	find -H $dir -regextype posix-extended $@ ! -type d ! -type p -exec ${(z)ex} '{}' '+'
 	unset ex
 }
 
@@ -628,7 +675,7 @@ m2s2 () {
 	dir="$1" 
 	[[ ${dir:0:1} != '/' ]] && dir="$PWD/$dir" 
 	shift
-	${(z)MPL} -playlist =(find $dir -regextype posix-extended ! -type d ! -type p $@ 2>/dev/null)
+	${(z)MPL} -playlist =(find -H $dir -regextype posix-extended ! -type d ! -type p $@ 2>/dev/null)
         unset MPL
 }
 
@@ -637,7 +684,7 @@ v2s2 () {
 	dir="$1" 
 	[[ ${dir:0:1} != '/' ]] && dir="$PWD/$dir" 
 	shift
-	${(z)MPL} -playlist =(find $dir -regextype posix-extended ! -type d ! -type p $@ 2>/dev/null | egrep -ai '(mkv|mp4|ogg|avi|divx|mpg|mpeg|wmv|asf|3gp|mov|skm|m4v|flv|rm|rmvb|nut|ogv|dv|ts|mts)$')
+	${(z)MPL} -playlist =(find -H $dir -regextype posix-extended ! -type d ! -type p $@ 2>/dev/null | egrep -ai $VID_EXT)
         unset MPL
 }
 
@@ -645,16 +692,16 @@ m2s2l () {
 	[[ -z $MPL ]] && MPL="mpv "
 	dir="$1" 
 	shift
-	find $dir -regextype posix-extended $@ 2> /dev/null | ${(z)MPL} -playlist -
+	find -H $dir -regextype posix-extended $@ 2> /dev/null | ${(z)MPL} -playlist -
 }
 
 m2sl () {
 	[[ -z $MPL ]] && MPL="mpv "
 	if [ -n "$2" ]
 	then
-		eval find ${1} -regextype posix-extended -iname '\*${2}\*' 2> /dev/null | ${(z)MPL} -playlist -
+		eval find -H ${1} -regextype posix-extended -iname '\*${2}\*' 2> /dev/null | ${(z)MPL} -playlist -
 	else
-		eval find $PWD -regextype posix-extended -iname '\*${1}\*' 2> /dev/null | ${(z)MPL} -playlist -
+		eval find -H $PWD -regextype posix-extended -iname '\*${1}\*' 2> /dev/null | ${(z)MPL} -playlist -
 	fi
 }
 
@@ -778,11 +825,11 @@ lT() {
 }
 
 lt2() {
-  find $1 -regextype posix-extended -maxdepth 1 -size +511k -type f -printf '%.23A+ %8k %h/%f\n' | sort -rh | less
+  find -H $1 -regextype posix-extended -maxdepth 1 -size +511k -type f -printf '%.23A+ %8k %h/%f\n' | sort -rh | less
 }
 
 lS2() {
-  find $1 -regextype posix-extended -size +511k -type f -printf '%8k %.23A+ %h/%f\n' | sort -rh | less
+  find -H $1 -regextype posix-extended -size +511k -type f -printf '%8k %.23A+ %h/%f\n' | sort -rh | less
 }
 
 lSH() {
@@ -835,6 +882,35 @@ mvunq () {
 pget () {
 	pbget --aur $@
 	eval cd $"$#"
+}
+
+ace() {
+  date 1>&2
+  id=
+
+  if [[ -f $1  ]]; then
+    id="`cat $1`"
+  else
+    id="$1"
+  fi
+
+  id=${id##*/}
+  pexec streamlink --hls-segment-timeout 120 "http://127.0.0.1:6878/ace/manifest.m3u8?id=${id}" best -O
+  #pexec curl -L "http://127.0.0.1:6878/ace/getstream?id=${id}"
+}
+
+pace() {
+  date 1>&2
+  id=
+
+  if [[ -f $1  ]]; then
+    id="`cat $1`"
+  else
+    id="$1"
+  fi
+
+  id=${id##*/}
+  pexec curl http://127.0.0.1:8000/pid/${id}/stream.mp4
 }
 
 . "$HOME"/.functions_private
